@@ -1,13 +1,40 @@
-import React , {useState} from 'react'
+import React , {useEffect, useState} from 'react'
 import { useNavigate } from 'react-router-dom'
 import MenuIcon from '@mui/icons-material/Menu';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Link } from 'react-router-dom';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import {useSelector} from 'react-redux'
 
 export const Header = () => {
+    const goals = useSelector(state => state.goals.goals);
+
+    const [isHovered , setIsHovered] = useState(false)
+    const [count , setCount] = useState(0)
+
+    const handleMouseEnter = () => {
+        setIsHovered(true);
+    };
+
+    const handleMouseLeave = () => {
+        setIsHovered(false);
+    };
+
+    useEffect(()=>{
+        const getValue = () => {
+            const filterGoals = goals.filter((item , index)=>{
+                if(item.status !== 'finished'){
+                    return item
+                }
+            })        
+            setCount(filterGoals.length)
+        }
+        getValue()
+    },[])
+
+    console.log(count)
     const [isOpen , setisOpen] = useState(false)
     const navigate = useNavigate()
-
     const handleClick = () => {
         navigate('/book-demo')
     }
@@ -20,9 +47,9 @@ export const Header = () => {
     <div className='w-full min-h-full  bg-[#f5ff7d]'>
         <div className=' flex md:flex justify-between h-16 p-3'>
 
-            <div><strong className='font-bold text-2xl'>Repeat</strong></div>
+            <div><strong className='font-bold text-2xl m-3'><Link to='/'>Repeat</Link></strong></div>
 
-            <ul className='hidden md:flex justify-center'>
+            <ul className='hidden md:flex justify-center m-2'>
                 <li className='relative mx-5 text-lg cursor-pointer' onClick={handleToggle}>Products
                 <ArrowDropDownIcon/>
                 {
@@ -70,7 +97,15 @@ export const Header = () => {
                 <li className='mx-5 text-lg cursor-pointer'>Stop Focusing on LTV</li>
             </ul>
             <div className='flex justify-end'>
-
+                <div className='m-2 pr-[10px] cursor-pointer relative' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <MailOutlineIcon/>
+                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full px-1">
+                    {count}
+                </div>
+                <div className={`absolute top-11 right-0 bg-[#f5ff7d] w-[250px] h-[40px]  text-black text-sx font-bold  px-1 ${isHovered ? 'visible' : 'hidden'}`}>
+                    You have {count} pending tasks
+                </div>
+                </div>
                 <button onClick={handleClick} className='bg-black text-white h-10 rounded-2xl px-1 w-36 text-xl  md:px-2 md:w-40 md:text-2x1'>Book a Demo</button>
                 <div className='flex justify-end pl-6 cursor-pointer pt-[6px] md:hidden'>
                     <MenuIcon onClick={handleToggle}/>                
