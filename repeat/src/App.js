@@ -1,6 +1,4 @@
-import logo from './logo.svg';
 import './App.css';
-import { CustomerMoment } from './components/CustomerMoment';
 import { Footer } from './components/Footer';
 import { BookForm } from './components/BookForm';
 import { BrowserRouter , Route , Routes} from 'react-router-dom'
@@ -17,20 +15,11 @@ function App() {
 
           <Routes>
             <Route path='/' element={<Home/>}/>
-          </Routes>
-
-          <Routes>
             <Route path='/book-demo' element={<BookForm/>}/>
-          </Routes>
-
-          <Routes>
             <Route path='/get-started' element={<StartForm/>}/>
-          </Routes>
-
-          <Routes>
             <Route path='/goals' element={<Goals/>}/>
+            <Route path="*" element={<div> Not Found or You do not have permission.</div>}/>
           </Routes>
-
           <Footer/>
         </div>
       </BrowserRouter>
